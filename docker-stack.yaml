@@ -10,7 +10,7 @@ services:
       - sys_nice
     ports:
       - "2456-2458:2456-2458/udp"
-      - "9001:9001/tcp"
+    #  - "9001:9001/tcp" # Supervisor
     environment:
       - "TZ=UTC"
       - "PUID=1000"
@@ -31,14 +31,14 @@ services:
       #- "ON_VALHEIM_LOG_FILTER_CONTAINS_Spawned={ read l; l=${l:46}; l=${l// :*/}; msg="[$(date +'%b %d %T')] Player $l connected."; curl -sfSL -X POST -H "Content-Type: application/json" -d "{\"username\":\"Hugin\",\"content\":\"$msg\"}" "$DISCORD_WEBHOOK"; }"
     volumes:
     #  - /etc/localtime:/etc/localtime:ro
-      - valheim-data/config:/config
-      - valheim-data/data:/opt/valheim
+      - valheim-config:/config
+      - valheim-data:/opt/valheim
     stop_grace_period: 2m
     deploy:
       mode: replicated
       replicas: 1
       restart_policy:
-        condition: always
+        condition: on-failure
       #placement:
       #  constraints:
       #    - node.role == manager
@@ -61,8 +61,12 @@ services:
 #    attachable: true
 #    driver: overlay
 
+# docker volume create --name valheim-config --driver local --opt type=none --opt o=bind --opt device=<path to volume>
 # docker volume create --name valheim-data --driver local --opt type=none --opt o=bind --opt device=<path to volume>
 volumes:
+  valheim-config:
+    name: valheim-config
+    driver: local
   valheim-data:
     name: valheim-data
     driver: local
