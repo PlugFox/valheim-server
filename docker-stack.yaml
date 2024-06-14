@@ -1,0 +1,68 @@
+version: '3.9'
+
+services:
+  valheim:
+    hostname: valheim
+    image: plugfox/valheim-server:latest
+    #networks:
+    #  - traefik
+    cap_add:
+      - sys_nice
+    ports:
+      - "2456-2458:2456-2458/udp"
+      - "9001:9001/tcp"
+    environment:
+      - "TZ=UTC"
+      - "PUID=1000"
+      - "PGID=1000"
+      - "SERVER_NAME=Valheim Server"
+      - "WORLD_NAME=foxworld"
+      #- "SERVER_PASS=SomeDifficultPasswordToGuess!"
+      - "SERVER_PUBLIC=false"
+      - "BACKUPS_MAX_AGE=30"
+      #- "SUPERVISOR_HTTP=true"
+
+      #Mods
+      #- "VALHEIM_PLUS=true
+      #- "BEPINEX=true"
+
+      #- "DISCORD_WEBHOOK=https://discord.com/api/webhooks/..........."
+      #- "VALHEIM_LOG_FILTER_CONTAINS_Spawned=Got character ZDOID from"
+      #- "ON_VALHEIM_LOG_FILTER_CONTAINS_Spawned={ read l; l=${l:46}; l=${l// :*/}; msg="[$(date +'%b %d %T')] Player $l connected."; curl -sfSL -X POST -H "Content-Type: application/json" -d "{\"username\":\"Hugin\",\"content\":\"$msg\"}" "$DISCORD_WEBHOOK"; }"
+    volumes:
+    #  - /etc/localtime:/etc/localtime:ro
+      - $HOME/valheim-server/config:/config
+      - $HOME/valheim-server/data:/opt/valheim
+    stop_grace_period: 2m
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: always
+      #placement:
+      #  constraints:
+      #    - node.role == manager
+      #resources:
+      #  limits:
+      #    cpus: '0.50'
+      #    memory: 256M
+      #  reservations:
+      #    cpus: '0.25'
+      #    memory: 128M
+      labels:
+        - org.label-schema.group=valheim
+
+# Traefik is a reverse proxy
+#networks:
+#  # Traefik overlay network
+#  traefik:
+#    name: traefik
+#    external: true
+#    attachable: true
+#    driver: overlay
+
+# docker volume create --name valheim-data --driver local --opt type=none --opt o=bind --opt device=<path to volume>
+volumes:
+  valheim-data:
+    name: valheim-data
+    driver: local

@@ -26,7 +26,7 @@ job "valheim" {
         SERVER_PASS = "secret"
       }
       config {
-        image = "ghcr.io/plugfox/valheim-server"
+        image = "plugfox/valheim-server"
         volumes = [
           "/var/lib/valheim/config:/config",
           "/var/lib/valheim/data:/opt/valheim"

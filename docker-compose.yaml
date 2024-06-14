@@ -1,6 +1,7 @@
 services:
   valheim:
-    image: ghcr.io/plugfox/valheim-server
+    hostname: valheim
+    image: plugfox/valheim-server:latest
     cap_add:
       - sys_nice
     volumes:

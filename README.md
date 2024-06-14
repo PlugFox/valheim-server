@@ -64,7 +64,7 @@ This project is hosted at [https://github.com/plugfox/valheim-server](https://gi
 
 # Basic Docker Usage
 
-The name of the Docker image is `ghcr.io/plugfox/valheim-server`.
+The name of the Docker image is `plugfox/valheim-server`.
 
 Volume mount the server config directory to `/config` within the Docker container.
 
@@ -88,7 +88,7 @@ $ docker run -d \
     -e SERVER_NAME="My Server" \
     -e WORLD_NAME="Neotopia" \
     -e SERVER_PASS="secret" \
-    ghcr.io/plugfox/valheim-server
+    plugfox/valheim-server
 ```
 
 Warning: `SERVER_PASS` must be at least 5 characters long. Otherwise `valheim_server.x86_64` will refuse to start!
