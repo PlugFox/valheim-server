@@ -31,8 +31,8 @@ services:
       #- "ON_VALHEIM_LOG_FILTER_CONTAINS_Spawned={ read l; l=${l:46}; l=${l// :*/}; msg="[$(date +'%b %d %T')] Player $l connected."; curl -sfSL -X POST -H "Content-Type: application/json" -d "{\"username\":\"Hugin\",\"content\":\"$msg\"}" "$DISCORD_WEBHOOK"; }"
     volumes:
     #  - /etc/localtime:/etc/localtime:ro
-      - $HOME/valheim-server/config:/config
-      - $HOME/valheim-server/data:/opt/valheim
+      - valheim-data/config:/config
+      - valheim-data/data:/opt/valheim
     stop_grace_period: 2m
     deploy:
       mode: replicated
